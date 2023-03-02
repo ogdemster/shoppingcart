@@ -1,13 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import rootReducer from "./redux/index";
+import { configureStore } from "@reduxjs/toolkit";
+import { logger } from "redux-logger";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "alertifyjs/build/css/alertify.min.css";
+import { BrowserRouter as Router } from "react-router-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const middleware = [logger, thunk];
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: middleware,
+});
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   </React.StrictMode>
 );
 
