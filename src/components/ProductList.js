@@ -14,10 +14,10 @@ function ProductList() {
   }, [dispatch]);
 
   if (loading) {
-    <div>Loading</div>;
+    return <div>Loading</div>;
   }
   if (error) {
-    <div>Error</div>;
+    return <div>Error</div>;
   }
 
   const handleBuy = (product) => {

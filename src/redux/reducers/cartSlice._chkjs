@@ -1,0 +1,73 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+
+export const addToCart = createAsyncThunk("cart/addToCart", async (item) => {
+  const response = await axios.post("/shoppingitems", item);
+  return response.data;
+});
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: {
+    cartItems: [],
+    cartTotal: 0,
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    removeFromCart: (state, action) => {
+      const { id } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
+      if (existingItem) {
+        if (existingItem.quantity > 1) {
+          existingItem.quantity--;
+        } else {
+          state.cartItems = state.cartItems.filter((item) => item.id !== id);
+        }
+        state.cartTotal = state.cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+      }
+    },
+    clearCart: (state) => {
+      state.cartItems = [];
+      state.cartTotal = 0;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addToCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        const newItem = action.payload;
+        const existingItem = state.cartItems.find(
+          (item) => item.id === newItem.item_id
+        );
+        if (existingItem) {
+          existingItem.quantity++;
+        } else {
+          state.cartItems.push({
+            id: newItem.id,
+            title: newItem.item_title,
+            price: newItem.item_price,
+            quantity: newItem.quantity,
+          });
+        }
+        state.cartTotal = state.cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        state.loading = false;
+      })
+      .addCase(addToCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});
+
+export const { removeFromCart, clearCart } = cartSlice.actions;
+export default cartSlice.reducer;

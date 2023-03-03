@@ -1,23 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table, Button, Container, Row, Col } from "react-bootstrap";
-import { removeFromCart, clearCart } from "../redux/reducers/cartSlice";
+import {
+  removeFromCart,
+  clearCart,
+  saveCart,
+} from "../redux/reducers/cartSlice";
 import { useNavigate } from "react-router-dom";
 
 function CartDetail() {
   const dispatch = useDispatch();
-  const nagivate = useNavigate();
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const navigate = useNavigate();
+  const { cartItems, cartTotal } = useSelector((state) => state.cart);
 
-  if (cartItems.length < 1) {
-    nagivate("/");
-  }
+  useEffect(() => {
+    if (cartItems.length < 1) {
+      navigate("/");
+    }
+  });
+
   const handleRemove = (item) => {
     dispatch(removeFromCart({ id: item.id }));
   };
 
   const handleClearCart = () => {
     dispatch(clearCart());
+  };
+
+  const handleSaveCart = async () => {
+    await dispatch(saveCart(cartItems));
   };
 
   let USDollar = new Intl.NumberFormat("en-US", {
@@ -30,7 +41,7 @@ function CartDetail() {
       <Row className="ml-auto justify-content-end">
         <Col xs={4}>
           <h5>Toplam Fiyat: </h5>
-          {cartItems.cartTotal}
+          {USDollar.format(cartTotal)}
         </Col>
       </Row>
       <Row>
@@ -68,6 +79,9 @@ function CartDetail() {
       <Row className="ml-auto justify-content-end">
         <Col xs={1}>
           <Button onClick={() => handleClearCart()}>Clear Cart</Button>
+        </Col>
+        <Col xs={1}>
+          <Button onClick={() => handleSaveCart()}>Save Cart</Button>
         </Col>
       </Row>
     </Container>

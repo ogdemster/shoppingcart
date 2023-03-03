@@ -1,4 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { setLoading, setError } from "./apiSlice";
+import axios from "axios";
+
+const baseurl = "http://127.0.0.1:5000";
 
 const initialState = {
   cartItems: [],
@@ -47,4 +51,31 @@ const cartSlice = createSlice({
 });
 
 export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+
+export const saveCart = createAsyncThunk(
+  "cart/saveCart",
+  async (cartItems, { dispatch }) => {
+    dispatch(setLoading(true));
+    try {
+      // const response = await axios.post(`${baseurl}/shoppingitems`, cartItems, {
+      //   headers: {
+      //     "content-type": "application/json",
+      //   },
+      // });
+      const response = await axios.post(`${baseurl}/shoppingitems`, cartItems, {
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      // handle response if needed
+      console.log(response);
+      dispatch(setLoading(false));
+    } catch (error) {
+      dispatch(setError(error.message));
+      dispatch(setLoading(false));
+      throw error;
+    }
+  }
+);
+
 export default cartSlice.reducer;
