@@ -1,14 +1,16 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
+import { Container } from "react-bootstrap";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useSelector } from "react-redux";
 import { Badge } from "react-bootstrap";
 import { FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Logout from "../components/Logout";
 
 function Navi() {
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -21,7 +23,27 @@ function Navi() {
               Home
             </Link>
           </Nav>
-          <Nav className="ml-auto">
+
+          {user.length > 0 ? (
+            <Logout usr={user} />
+          ) : (
+            <>
+              <Link to="/login" className="nav-link" style={{ width: "80px" }}>
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="nav-link"
+                style={{ width: "80px" }}
+              >
+                Register
+              </Link>
+            </>
+          )}
+          <Nav
+            className="ml-auto justify-content-center"
+            style={{ width: "100px" }}
+          >
             {cartItems.length < 1 ? (
               <Nav.Link href="#" disabled>
                 <FaShoppingBag />

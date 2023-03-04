@@ -75,6 +75,7 @@ const productSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
+        console.log(action);
         state.loading = false;
         state.products = action.payload;
       })
@@ -84,11 +85,9 @@ const productSlice = createSlice({
       })
       .addMatcher(
         (action) => {
-          return [
-            addProduct.pending,
-            updateProduct.pending,
-            deleteProduct.pending,
-          ].some((thunk) => action.type === thunk.type);
+          return [addProduct, updateProduct, deleteProduct].some((thunk) =>
+            action.type.startsWith(thunk.typePrefix)
+          );
         },
         (state) => {
           state.loading = true;
