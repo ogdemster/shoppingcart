@@ -7,29 +7,24 @@ const initialState = {
   error: null,
 };
 
+const baseurl = "http://127.0.0.1:5000";
+
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
-    const { data } = await axios.get("https://dummyjson.com/products");
-    return data.products;
+    const { data } = await axios.get(`${baseurl}/products`);
+    return data;
   }
 );
 
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (productData) => {
+    console.log("here" + productData);
     const response = await axios
-      .post(
-        "https://dummyjson.com/products/add",
-        {
-          body: JSON.stringify({
-            ...productData,
-          }),
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+      .post(`${baseurl}/products`, productData, {
+        headers: { "Content-Type": "application/json" },
+      })
       .then((res) => res.data);
     return response;
   }
@@ -39,17 +34,9 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async (productData) => {
     const response = await axios
-      .put(
-        `https://dummyjson.com/products/${productData.id}`,
-        {
-          body: JSON.stringify({
-            ...productData,
-          }),
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+      .put(`${baseurl}/products/${productData.id}`, productData, {
+        headers: { "Content-Type": "application/json" },
+      })
       .then((res) => res.data);
     return response;
   }
@@ -59,7 +46,9 @@ export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (id) => {
     const response = await axios
-      .delete(`https://dummyjson.com/products/${id}`)
+      .delete(`${baseurl}/products/${id}`, {
+        headers: {},
+      })
       .then((res) => res.data);
     return response;
   }

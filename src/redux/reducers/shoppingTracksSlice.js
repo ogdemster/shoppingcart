@@ -62,7 +62,11 @@ export const deleteShoppingTracks = createAsyncThunk(
 const shoppingTracksSlice = createSlice({
   name: "shoppingTracks",
   initialState,
-  reducers: {},
+  reducers: {
+    clearShoppingTracks: (state) => {
+      state.shoopingTracks = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchShoppingTracks.pending, (state) => {
@@ -128,5 +132,7 @@ const shoppingTracksSlice = createSlice({
       );
   },
 });
+
+export const { clearShoppingTracks } = shoppingTracksSlice.actions;
 
 export default shoppingTracksSlice.reducer;

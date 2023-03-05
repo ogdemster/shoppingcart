@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 import {
   addProduct,
   updateProduct,
   deleteProduct,
 } from "../redux/reducers/productSlice";
-import alertify from "alertifyjs";
 
 function ProductDetails() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { id } = useParams();
 
   const { products } = useSelector((state) => state.products);
@@ -21,32 +19,32 @@ function ProductDetails() {
   }
 
   const [formProduct, setFormProduct] = useState({
-    title: "",
-    description: "",
-    price: "",
-    discountPercentage: "",
-    rating: "",
-    stock: "",
-    brand: "",
-    category: "",
-    thumbnail: "",
-    images: "",
+    title: product.title || "",
+    description: product.description || "",
+    price: product.price || "",
+    discountPercentage: product.discountPercentage || "",
+    rating: product.rating || "",
+    stock: product.stock || "",
+    brand: product.brand || "",
+    category: product.category || "",
+    thumbnail: product.thumbnail || "",
+    images: product.images || "",
   });
 
-  useEffect(() => {
-    setFormProduct({
-      title: product.title || "",
-      description: product.description || "",
-      price: product.price || "",
-      discountPercentage: product.discountPercentage || "",
-      rating: product.rating || "",
-      stock: product.stock || "",
-      brand: product.brand || "",
-      category: product.category || "",
-      thumbnail: product.thumbnail || "",
-      images: product.images || "",
-    });
-  }, []);
+  // useEffect(() => {
+  //   setFormProduct({
+  //     title: product.title || "",
+  //     description: product.description || "",
+  //     price: product.price || "",
+  //     discountPercentage: product.discountPercentage || "",
+  //     rating: product.rating || "",
+  //     stock: product.stock || "",
+  //     brand: product.brand || "",
+  //     category: product.category || "",
+  //     thumbnail: product.thumbnail || "",
+  //     images: product.images || "",
+  //   });
+  // }, [product]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -56,56 +54,20 @@ function ProductDetails() {
     }));
   };
 
-  const handleConfirmation = (title, message, onConfirm, onCancel) => {
-    alertify.confirm(title, message, onConfirm, onCancel);
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     if (product.id > 0) {
-      handleConfirmation(
-        "Update Product",
-        "Do you want to update?",
-        async function () {
-          dispatch(updateProduct({ id, ...formProduct }));
-          navigate("/");
-          alertify.success("Successfully updated");
-        },
-        function () {
-          alertify.error("Cancel");
-        }
-      );
+      dispatch(updateProduct({ id: product.id, ...formProduct }));
     } else {
-      handleConfirmation(
-        "Add Product",
-        "Do you want to add?",
-        async function () {
-          dispatch(addProduct(formProduct));
-          navigate("/");
-          alertify.success("Successfully added");
-        },
-        function () {
-          alertify.error("Cancel");
-        }
-      );
+      console.log(formProduct);
+      dispatch(addProduct(formProduct));
     }
   };
 
   const handleDelete = (event) => {
     event.preventDefault();
     if (product.id) {
-      handleConfirmation(
-        "Delete Product",
-        "Do you want to delete?",
-        async function () {
-          dispatch(deleteProduct(id));
-          navigate("/");
-          alertify.success("Successfully deleted");
-        },
-        function () {
-          alertify.error("Cancel");
-        }
-      );
+      dispatch(deleteProduct(product.id));
     }
   };
 

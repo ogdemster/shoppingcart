@@ -54,19 +54,18 @@ export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
 
 export const saveCart = createAsyncThunk(
   "cart/saveCart",
-  async (cartItems, { dispatch }) => {
+  async ({ cartItems, userId }, { dispatch }) => {
     dispatch(setLoading(true));
     try {
-      // const response = await axios.post(`${baseurl}/shoppingitems`, cartItems, {
-      //   headers: {
-      //     "content-type": "application/json",
-      //   },
-      // });
-      const response = await axios.post(`${baseurl}/shoppingitems`, cartItems, {
-        headers: {
-          "content-type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${baseurl}/shoppingitems`,
+        { cartItems, userId },
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+        }
+      );
       // handle response if needed
       console.log(response);
       dispatch(setLoading(false));

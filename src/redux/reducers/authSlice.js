@@ -13,7 +13,7 @@ export const loginUser = createAsyncThunk(
   "auth/LoginUser",
   async ({ username, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${baseurl}/login`, {
+      const response = await axios.post(`${baseurl}/auth`, {
         username,
         password,
       });
@@ -46,6 +46,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
+        console.log(action.payload);
         state.user = action.payload;
       })
       .addCase(loginUser.rejected, (state, action) => {

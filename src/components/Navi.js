@@ -7,7 +7,6 @@ import { Badge } from "react-bootstrap";
 import { FaShoppingBag } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Logout from "../components/Logout";
-
 function Navi() {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const user = useSelector((state) => state.auth.user);
@@ -21,6 +20,9 @@ function Navi() {
           <Nav className="me-auto">
             <Link to="/" className="nav-link">
               Home
+            </Link>
+            <Link to="/productdetails" className="nav-link">
+              New Product
             </Link>
           </Nav>
 

@@ -6,12 +6,14 @@ import {
   clearCart,
   saveCart,
 } from "../redux/reducers/cartSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import alertify from "alertifyjs";
 
 function CartDetail() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartItems, cartTotal } = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     if (cartItems.length < 1) {
@@ -27,8 +29,19 @@ function CartDetail() {
     dispatch(clearCart());
   };
 
-  const handleSaveCart = async () => {
-    await dispatch(saveCart(cartItems));
+  const handleSaveCart = () => {
+    alertify.confirm(
+      "Complate Shopping",
+      "Do you want to buy this products",
+      async function () {
+        await dispatch(saveCart({ cartItems: cartItems, userId: user[0].id }));
+        dispatch(clearCart());
+        alertify.success("Ok");
+      },
+      function () {
+        alertify.error("Cancel");
+      }
+    );
   };
 
   let USDollar = new Intl.NumberFormat("en-US", {
@@ -81,7 +94,11 @@ function CartDetail() {
           <Button onClick={() => handleClearCart()}>Clear Cart</Button>
         </Col>
         <Col xs={1}>
-          <Button onClick={() => handleSaveCart()}>Save Cart</Button>
+          {user && user[0] ? (
+            <Button onClick={() => handleSaveCart()}>Save Cart</Button>
+          ) : (
+            <Link to="/login">Login First</Link>
+          )}
         </Col>
       </Row>
     </Container>
