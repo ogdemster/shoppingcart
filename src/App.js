@@ -9,6 +9,7 @@ import { Container } from "react-bootstrap";
 import ShopHistory from "./components/ShopHistory";
 import ShopHistoryDetail from "./components/ShopHistoryDetail";
 import Account from "./components/Account";
+import Login2 from "./components/Login2";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/shophistory" element={<ShopHistory />} />
         <Route path="/shophistorydetail/:id" element={<ShopHistoryDetail />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/login2" element={<Login2 />} />
       </Routes>
     </Container>
   );

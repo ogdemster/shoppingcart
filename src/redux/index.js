@@ -6,6 +6,8 @@ import authReducer from "./reducers/authSlice";
 import shoppingTracksReducer from "./reducers/shoppingTracksSlice";
 import shoppingItemsReducer from "./reducers/shoppingItemsSlice";
 
+import authReducer2 from "./reducers/authCookieSlice";
+
 export default combineReducers({
   products: productReducer,
   cart: cartReducer,
@@ -13,4 +15,5 @@ export default combineReducers({
   auth: authReducer,
   shoopingTracks: shoppingTracksReducer,
   shoppingItems: shoppingItemsReducer,
+  auht2: authReducer2,
 });
