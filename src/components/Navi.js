@@ -33,9 +33,9 @@ function Navi() {
               <Link to="/login" className="nav-link" style={{ width: "80px" }}>
                 Login
               </Link>
-              <Link to="/login2" className="nav-link" style={{ width: "80px" }}>
+              {/* <Link to="/login2" className="nav-link" style={{ width: "80px" }}>
                 Login2
-              </Link>
+              </Link> */}
               <Link
                 to="/register"
                 className="nav-link"
